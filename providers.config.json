@@ -1,0 +1,11 @@
+{
+  "compat": [
+    {
+      "id": "ollama",
+      "name": "Ollama (local)",
+      "baseURL": "http://localhost:11434/v1",
+      "apiKeyEnv": null,
+      "models": ["llama3.3"]
+    }
+  ]
+}

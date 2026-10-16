@@ -1,0 +1,112 @@
+/* App-level additions on top of theme.css (DESIGN.md §9). Everything here follows DESIGN.md §5–§8. */
+@import "./theme.css";
+
+@layer components {
+  /* §4 main frame: ink side rules + flat paper wash over the graph paper */
+  .frame { border-inline: 1px solid var(--color-ink); background: rgb(236 230 216 / .6); }
+
+  .btn-icon { @apply inline-grid size-6 place-items-center border border-ink font-mono text-sm
+                     transition-colors duration-150 ease-instrument hover:bg-ink hover:text-paper
+                     disabled:opacity-35 disabled:cursor-not-allowed; }
+
+  .select { @apply w-full cursor-pointer appearance-none border border-ink bg-sheet py-2 pl-2 pr-6 font-mono text-sm; }
+
+  /* Section index: inverted ink block + label + rule filling the row */
+  .sec-h { @apply flex items-baseline gap-2 font-mono text-[11px] font-medium uppercase tracking-[.14em] text-ink; }
+  .sec-h .n { @apply bg-ink px-1.5 text-paper; }
+  .sec-h .rule { @apply h-px flex-1 bg-ink; }
+
+  .fig { @apply font-mono text-[11px] text-graphite; }
+
+  /* §7 alert */
+  .alert { @apply border border-ink bg-sheet px-2 py-1.5 font-mono text-[13px]; border-left: 6px solid var(--color-kr); }
+  .alert-err { border-left-color: var(--color-redline); background: color-mix(in srgb, var(--color-redline) 10%, var(--color-sheet)); }
+
+  /* §7 toggle */
+  .toggle { @apply relative inline-block h-[18px] w-[42px] shrink-0 border border-ink transition-colors duration-150 ease-instrument; }
+  .toggle::after { content: ""; @apply absolute top-[2px] left-[2px] size-[12px] bg-graphite transition-[left] duration-150 ease-instrument; }
+  .toggle[aria-checked="true"] { @apply bg-kr; }
+  .toggle[aria-checked="true"]::after { @apply left-[24px] bg-ink; }
+
+  /* §7 meter: ruler ticks + hard kr fill */
+  .meter { @apply relative h-[18px] border border-ink;
+           background: repeating-linear-gradient(90deg, transparent 0 11px, var(--color-rule) 11px 12px); }
+  .meter > i { @apply absolute inset-y-0 left-0 bg-kr; }
+
+  /* §7 data table */
+  .dtable { @apply w-full border-collapse font-mono text-[13px]; }
+  .dtable th { @apply border-b border-ink px-1 pb-[10px] text-left text-[10px] font-normal uppercase tracking-[.16em] text-ink; }
+  .dtable td { @apply border-b border-rule px-1 py-[10px]; }
+  .dtable .r { @apply text-right tabular-nums; }
+  .dtable tr.hi td { background: rgb(255 91 20 / .18); }
+
+  /* §7 event log */
+  .evlog { @apply m-0 whitespace-pre-wrap font-mono text-graphite; font-size: 12.5px; line-height: 1.75; }
+  .evlog .k { @apply text-ink; }
+  .evlog .v { @apply text-ink; }
+  .evlog .er { @apply text-redline-text; }
+
+  /* §8 wordmark */
+  .wordmark { @apply font-sans font-bold uppercase leading-[0.9] tracking-[-0.04em] text-ink; }
+  .wordmark .slash { color: var(--color-kr); }
+
+  /* §8 spectrum figure — the one sanctioned gradient */
+  .spectrum { @apply relative h-[54px] border border-ink;
+    background: linear-gradient(90deg, #7a00c8 0%, #2e2bff 13%, #00a3ff 27%, #00d27a 40%, #a6e000 53%, #ffd000 60%, #ff8a00 68%, #ff3a00 80%, #c40000 100%); }
+  .spectrum .mk { @apply absolute -top-[10px] -bottom-[22px] w-px bg-ink; left: 68.6%; }
+  .spectrum .mk span { @apply absolute bottom-0 left-1 whitespace-nowrap font-mono text-[10px] text-ink; }
+  .ticks { @apply mt-[2px] h-[12px];
+    background:
+      repeating-linear-gradient(90deg, var(--color-ink) 0 1px, transparent 1px 10%),
+      repeating-linear-gradient(90deg, var(--color-ink) 0 1px, transparent 1px 2%);
+    background-size: 100% 12px, 100% 5px; background-repeat: no-repeat; }
+
+  /* Context file drop zone */
+  .dropzone { @apply flex items-center justify-between gap-1 border border-dashed border-ink px-2 py-1.5 font-mono text-[11px] uppercase tracking-[.12em]; }
+  .dropzone[data-over="true"] { border-color: var(--color-kr); }
+
+  /* Thinking block */
+  .thinking { @apply border border-dashed border-rule px-2 py-1.5 font-mono text-[12px] text-graphite; }
+  [data-stock] .thinking { border-color: var(--stock-rule); color: var(--stock-muted); }
+}
+
+/* Streaming cursor: kr block, hard blink */
+.cursor::after, .reply.streaming > :last-child::after { content: "▍"; color: var(--color-kr); animation: blink 1s steps(1) infinite; margin-left: 1px; }
+@keyframes blink { 50% { opacity: 0; } }
+
+/* ---- Rendered replies (DESIGN.md §8) — only var(--stock-*) ---- */
+.reply { overflow-wrap: anywhere; }
+.reply > :first-child { margin-top: 0; }
+.reply > :last-child { margin-bottom: 0; }
+.reply p, .reply ul, .reply ol, .reply pre, .reply table, .reply blockquote { margin: 0 0 .9em; }
+.reply ul { list-style: square; padding-left: 1.3em; }
+.reply ol { list-style: decimal; padding-left: 1.5em; }
+.reply li + li { margin-top: .25em; }
+.reply h1, .reply h2, .reply h3, .reply h4 { font-family: var(--stock-font); font-weight: 600; margin: 1.2em 0 .5em; line-height: 1.2; }
+.reply h1 { font-size: 30px; }
+.reply h2 { font-size: 20px; }
+.reply h3, .reply h4 { font-size: 16px; }
+.reply a { color: var(--stock-link); text-decoration: underline; }
+.reply code { font-family: var(--font-mono); font-size: .88em; background: var(--stock-code-bg); border: 1px solid var(--stock-rule); padding: 0 4px; }
+.reply pre { background: var(--stock-pre-bg); color: var(--stock-pre-fg); font-family: var(--font-mono); font-size: 13px; line-height: 1.6; padding: 18px; overflow-x: auto; }
+.reply pre code { background: none; border: 0; padding: 0; font-size: inherit; color: inherit; }
+.reply blockquote { border-left: 3px solid currentColor; padding-left: 12px; color: var(--stock-muted); }
+.reply hr { border: 0; border-top: 1px solid var(--stock-rule); margin: 1.2em 0; }
+.reply table { border-collapse: collapse; font-family: var(--font-mono); font-size: 13px; width: 100%; }
+.reply th { text-align: left; font-weight: 400; font-size: 10px; letter-spacing: .16em; text-transform: uppercase; border-bottom: 1px solid currentColor; padding: 0 6px 10px; }
+.reply td { border-bottom: 1px solid var(--stock-rule); padding: 10px 6px; }
+.raw { font-family: var(--font-mono); font-size: 13px; line-height: 1.6; white-space: pre-wrap; overflow-wrap: anywhere; margin: 0; }
+
+/* User prompt block inside a lane */
+.you { background: rgb(20 17 13 / .06); }
+[data-stock="b"] .you { background: rgb(236 230 216 / .06); }
+.you .who { color: var(--stock-muted); }
+
+/* Vellum is already mono: give its code blocks the ink treatment */
+[data-stock="c"] .reply pre { background: var(--color-ink); color: var(--color-paper); }
+
+@media (prefers-reduced-motion: reduce) {
+  .cursor::after, .reply.streaming > :last-child::after { animation: none; }
+  .btn-primary, .btn-primary:hover, .btn-primary:active { transform: none !important; }
+  * { transition-duration: 0ms !important; }
+}

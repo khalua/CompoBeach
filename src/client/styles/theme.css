@@ -1,0 +1,82 @@
+@import "tailwindcss";
+
+@theme {
+  --color-paper:        #ece6d8;
+  --color-sheet:        #f4efe4;
+  --color-rule:         #b9ae96;
+  --color-graphite:     #6b6354;
+  --color-ink:          #14110d;
+  --color-kr:           #ff5b14;
+  --color-cobalt:       #1b3cff;
+  --color-redline:      #d8121b;
+  --color-redline-text: #b80f17;
+
+  --font-sans: "IBM Plex Sans Condensed", ui-sans-serif, sans-serif;
+  --font-mono: "IBM Plex Mono", ui-monospace, monospace;
+
+  --spacing: 6px;
+
+  --radius-*: initial;          /* kill every radius utility */
+  --shadow-*: initial;          /* kill soft shadows */
+  --shadow-hard: 3px 3px 0 var(--color-ink);
+  --shadow-hard-sm: 2px 2px 0 var(--color-ink);
+
+  --ease-instrument: cubic-bezier(.2, 0, 0, 1);
+}
+
+@layer base {
+  html { @apply bg-paper text-ink font-sans antialiased; }
+  body {
+    background-image:
+      linear-gradient(rgb(20 17 13 / .05) 1px, transparent 1px),
+      linear-gradient(90deg, rgb(20 17 13 / .05) 1px, transparent 1px);
+    background-size: 24px 24px;
+  }
+  ::selection { background: var(--color-kr); color: var(--color-ink); }
+  :focus-visible { outline: 2px solid var(--color-kr); outline-offset: 2px; }
+  .num { font-family: var(--font-mono); font-variant-numeric: tabular-nums; }
+}
+
+@layer components {
+  .label { @apply font-mono text-[11px] font-medium uppercase tracking-[.14em] text-graphite; }
+
+  .btn { @apply inline-flex items-center gap-1.5 px-3 py-2 font-mono text-xs font-medium uppercase tracking-[.12em]
+                 transition-transform duration-150 ease-instrument disabled:opacity-35 disabled:cursor-not-allowed; }
+  .btn::after { content: "→"; }
+  /* compose in markup: class="btn btn-primary" */
+  .btn-primary { @apply bg-kr text-ink shadow-hard hover:translate-x-px hover:translate-y-px hover:shadow-hard-sm
+                        active:translate-x-[3px] active:translate-y-[3px] active:shadow-none; }
+  .btn-ghost   { @apply border border-ink hover:bg-ink hover:text-paper; }
+  .btn-danger  { @apply border border-redline text-redline-text; }
+
+  .panel   { @apply relative border border-ink bg-sheet p-4; }
+  .panel-h { @apply mb-3 border-b border-rule pb-1.5 font-mono text-[11px] font-medium uppercase tracking-[.14em] text-ink; }
+  .crop::before, .crop::after {
+    content: ""; position: absolute; width: 12px; height: 12px; border: 1px solid var(--color-kr);
+  }
+  .crop::before { top: -7px; left: -7px; border-right: 0; border-bottom: 0; }
+  .crop::after  { bottom: -7px; right: -7px; border-left: 0; border-top: 0; }
+
+  .input { @apply w-full border border-ink bg-sheet px-2 py-2 font-mono text-sm placeholder:text-graphite/60; }
+  .tag   { @apply inline-block border border-current px-[8px] py-[3px] font-mono text-[11px] uppercase tracking-[.1em]; }
+  .lane-id { @apply inline-grid size-4 place-items-center border border-ink font-mono text-xs font-semibold;
+             background: var(--stock-bg); color: var(--stock-fg); }
+}
+
+/* ---- Lane stocks: put data-stock="a|b|c|d" on the lane body ---- */
+[data-stock] {
+  background: var(--stock-bg); color: var(--stock-fg);
+  font-family: var(--stock-font); font-size: var(--stock-size); line-height: var(--stock-leading);
+}
+[data-stock="a"] { --stock-bg:#f4efe4; --stock-fg:#14110d; --stock-muted:#6b6354; --stock-rule:#b9ae96;
+  --stock-font:"IBM Plex Sans Condensed",sans-serif; --stock-size:16px; --stock-leading:1.5;
+  --stock-link:#1b3cff; --stock-code-bg:#ece6d8; --stock-pre-bg:#14110d; --stock-pre-fg:#ece6d8; }
+[data-stock="b"] { --stock-bg:#1c1914; --stock-fg:#ece6d8; --stock-muted:#a39a88; --stock-rule:#3a342b;
+  --stock-font:"IBM Plex Serif",serif; --stock-size:16px; --stock-leading:1.65;
+  --stock-link:#8fa2ff; --stock-code-bg:#2a251e; --stock-pre-bg:#2a251e; --stock-pre-fg:#ece6d8; }
+[data-stock="c"] { --stock-bg:#dfe2dc; --stock-fg:#14110d; --stock-muted:#5b6058; --stock-rule:#a9ada3;
+  --stock-font:"IBM Plex Mono",monospace; --stock-size:14px; --stock-leading:1.7;
+  --stock-link:#1b3cff; --stock-code-bg:#d2d6cf; --stock-pre-bg:#14110d; --stock-pre-fg:#ece6d8; }
+[data-stock="d"] { --stock-bg:#d8c6a5; --stock-fg:#14110d; --stock-muted:#5e4f37; --stock-rule:#a8916a;
+  --stock-font:"IBM Plex Sans",sans-serif; --stock-size:15px; --stock-leading:1.55;
+  --stock-link:#1b3cff; --stock-code-bg:#cdb995; --stock-pre-bg:#14110d; --stock-pre-fg:#ece6d8; }
